@@ -1,0 +1,46 @@
+[package]
+authors = ["The RustWasm Developers"]
+categories = ["wasm"]
+description = "My super awesome WebAssembly crate!"
+license = "Apache-2.0/MIT"
+name = "crate-wasm"
+readme = "./README.md"
+repository = "https://github.com/rustwasm/rust-wasm-worker-template"
+version = "0.1.0"
+edition = "2018"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+anyhow = "1.0.31"
+primal-sieve = "0.2.9"
+lazy_static = "1.4"
+serde = "1"
+serde_derive = "1"
+
+cfg-if = "0.1.10"
+wasm-bindgen = "0.2.59"
+yew = { git = "https://github.com/yewstack/yew"}
+yewtil = { git = "https://github.com/yewstack/yew"}
+indexmap = "1.4.0"
+uuid = {version = "0.8.1", features=["v4"]}
+
+# yew = { version = "0.16.2"}
+
+# yew = { version = "0.14.1", features = ["std_web"], git = "https://github.com/jkelleyrtp/yew.git" }
+# The `console_error_panic_hook` crate provides better debugging of panics by
+# logging them with `console.error`. This is great for development, but requires
+# all the `std::fmt` and `std::panicking` infrastructure, so isn't great for
+# code size when deploying.
+console_error_panic_hook = { version = "0.1.6", optional = true }
+
+# `wee_alloc` is a tiny allocator for wasm that is only ~1K in code size
+# compared to the default allocator's ~10K. It is slower than the default
+# allocator, however.
+wee_alloc = { version = "0.4.5", optional = true }
+
+# web-sys = { version = "0.3", features = ["console"] }
+
+[features]
+default-features = ["console_error_panic_hook"]

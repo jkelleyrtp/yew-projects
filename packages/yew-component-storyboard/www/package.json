@@ -1,0 +1,21 @@
+{
+  "author": "Jonathan Kelley",
+  "name": "create-rust-wasm-worker",
+  "version": "0.1.0",
+  "repository": "https://github.com/rustwasm/rust-wasm-worker-template",
+  "license": "Apache-2.0/MIT",
+  "scripts": {
+    "start": "webpack-dev-server -d",
+    "build": "webpack --mode production"
+  },
+  "bin": {
+    "create-rust-wasm-worker": ".bin/create-rust-wasm-worker.js"
+  },
+  "devDependencies": {
+    "@wasm-tool/wasm-pack-plugin": "^1.2.0",
+    "html-webpack-plugin": "^3.2.0",
+    "webpack": "^4.42.0",
+    "webpack-cli": "^3.3.11",
+    "webpack-dev-server": "^3.10.3"
+  }
+}

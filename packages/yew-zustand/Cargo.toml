@@ -1,0 +1,28 @@
+[package]
+name = "yew-zustand"
+version = "0.1.0"
+authors = ["Jonathan Kelley <jkelleyrtp@gmail.com>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+# yew = {path="./vendor/yew/yew"}
+# yew-functional = {path="./vendor/yew/yew-functional"}
+anyhow = "1"
+yew = { git = "https://github.com/yewstack/yew" }
+yew-functional = { git = "https://github.com/yewstack/yew" }
+wasm-bindgen = { version = "0.2.67", features = ["serde-serialize"] }
+wasm-bindgen-futures = "0.4"
+wasm-bindgen-test = "0.3.17"
+# fc-macros = {path="../../fc-macros"}
+fc-macros = { git = "https://github.com/jkelleyrtp/yew-fc-macros" }
+wasm-logger = "0.2.0"
+log = "0.4"
+closure = "0.3.0"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+im-rc = "15.0.0"
+
+[lib]
+crate-type = ["cdylib", "rlib"]

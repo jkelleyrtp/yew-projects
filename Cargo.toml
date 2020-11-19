@@ -1,0 +1,8 @@
+[workspace]
+members = [
+    "packages/yew-desktop",
+    "packages/recoil-yew",
+    "packages/recoil-examples",
+    "packages/yew-pack-example",
+    "packages/yew-pack",
+]

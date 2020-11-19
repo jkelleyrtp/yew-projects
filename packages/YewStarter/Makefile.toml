@@ -1,0 +1,3 @@
+[tasks.serve]
+command = "wasm-pack"
+args = ["test", "--chrome"]
