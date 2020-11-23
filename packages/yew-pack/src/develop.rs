@@ -37,6 +37,7 @@ async fn watch_src_dir() -> Result<()> {
         .watch("/home/test/notify", RecursiveMode::Recursive)
         .unwrap();
 
+        rx.
     loop {
         match rx.recv() {
             Ok(event) => println!("{:?}", event),
