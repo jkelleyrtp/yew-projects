@@ -1,6 +1,6 @@
-use recoil_yew::prelude::RecoilRoot;
 use yew::prelude::*;
 use yew_functional::*;
+use yew_recoil::prelude::RecoilRoot;
 
 mod canvas;
 mod counter;

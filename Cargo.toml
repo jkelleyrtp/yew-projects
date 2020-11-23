@@ -2,7 +2,7 @@
 members = [
     "packages/yew-store",
     # "packages/yew-desktop",
-    "packages/recoil-yew",
+    "packages/yew-recoil",
     "packages/recoil-examples",
     "packages/yew-pack-example",
     "packages/yew-pack",

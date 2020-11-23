@@ -1,6 +1,6 @@
-use recoil_yew::hooks::use_recoil_value;
 use yew::prelude::*;
 use yew_functional::function_component;
+use yew_recoil::hooks::use_recoil_value;
 
 use crate::state::COUNTER;
 
