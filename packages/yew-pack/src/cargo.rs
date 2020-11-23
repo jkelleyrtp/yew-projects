@@ -1,13 +1,6 @@
 //! Utilities for working with cargo and rust files
-
 use crate::error::{Error, Result};
-use std::collections::HashMap;
-use std::convert::TryInto;
-use std::env;
-use std::fs;
-use std::path::PathBuf;
-use std::process::{self, Command};
-use std::{fmt, path, str};
+use std::{env, fs, path::PathBuf, process::Command, str};
 
 /// How many parent folders are searched for a `Cargo.toml`
 const MAX_ANCESTORS: u32 = 10;
@@ -15,7 +8,7 @@ const MAX_ANCESTORS: u32 = 10;
 /// Returns the root of the crate that the command is run from
 ///
 /// If the command is run from the workspace root, this will return the top-level Cargo.toml
-pub fn crate_root() -> Option<PathBuf> {
+pub fn crate_root() -> Result<PathBuf> {
     /// Checks if the directory contains `Cargo.toml`
     fn contains_manifest(path: &PathBuf) -> bool {
         fs::read_dir(path)
@@ -28,22 +21,25 @@ pub fn crate_root() -> Option<PathBuf> {
     }
 
     // From the current directory we work our way up, looking for `Cargo.toml`
-    env::current_dir().ok().and_then(|mut wd| {
-        for _ in 0..MAX_ANCESTORS {
-            if contains_manifest(&wd) {
-                return Some(wd);
+    env::current_dir()
+        .ok()
+        .and_then(|mut wd| {
+            for _ in 0..MAX_ANCESTORS {
+                if contains_manifest(&wd) {
+                    return Some(wd);
+                }
+                if !wd.pop() {
+                    break;
+                }
             }
-            if !wd.pop() {
-                break;
-            }
-        }
 
-        None
-    })
+            None
+        })
+        .ok_or_else(|| Error::CargoError("Faield to find the cargo directory".to_string()))
 }
 
 /// Returns the root of a workspace
-pub fn workspace_root() -> Result<String> {
+pub fn workspace_root() -> Result<PathBuf> {
     let output = Command::new("cargo")
         .args(&["metadata"])
         .output()
@@ -64,7 +60,7 @@ pub fn workspace_root() -> Result<String> {
         let root = meta["workspace_root"]
             .as_str()
             .ok_or_else(|| Error::CargoError("InvalidOutput".to_string()))?;
-        return Ok(root.to_string());
+        return Ok(root.into());
     }
 
     Err(Error::CargoError("InvalidOutput".to_string()))

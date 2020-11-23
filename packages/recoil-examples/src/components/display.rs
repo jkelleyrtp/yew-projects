@@ -12,8 +12,13 @@ pub fn display() -> Html {
     let incr = yew::Callback::from(move |_| set_count(*count + 1));
 
     html! {
-        <div>
-            {title}
+        <div class="text-center">
+            <h1 class="text-2xl tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-6xl text-center">
+                <span class="block xl:inline">{"Hello recoil!"}</span>
+            </h1>
+            <p class="text-base text-gray-500 text-center">
+                {title}
+            </p>
             <br />
             <button onclick=incr>{"Increment value"} </button>
         </div>

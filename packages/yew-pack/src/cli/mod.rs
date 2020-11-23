@@ -1,50 +1,43 @@
 use crate::error::Error;
 use argh::FromArgs;
 
-mod build;
-mod develop;
-mod publish;
-mod test;
-
 #[derive(FromArgs, PartialEq, Debug)]
 /// Top-level command.
 pub struct LaunchOptions {
     #[argh(subcommand)]
-    nested: Command,
+    pub command: LaunchCommand,
 }
 
 /// The various kinds of commands that `wasm-pack` can execute.
 #[derive(FromArgs, PartialEq, Debug)]
 #[argh(subcommand)]
-pub enum Command {
+pub enum LaunchCommand {
     /// 🛠 Start a development server
-    Develop(develop::DevelopOptions),
+    Develop(DevelopOptions),
 
     /// 🏗️  build your npm package!
-    Build(build::BuildOptions),
+    Build(BuildOptions),
 
     /// 👩‍🔬  test your wasm!
-    Test(test::TestOptions),
+    Test(TestOptions),
 }
 
-/// Run a command with the given logger!
-pub fn run_yew_pack(command: Command) -> std::result::Result<(), Error> {
-    // Run the correct command based off input and store the result of it so that we can clear
-    // the progress bar then return it
-    match command {
-        Command::Develop(_) => {
-            log::info!("hello");
-            Ok(())
-        }
+/// Everything required to configure and run the `wasm-pack build` command.
+#[derive(FromArgs, PartialEq, Debug)]
+#[argh(subcommand, name = "publish")]
+pub struct PublishOptions {}
 
-        Command::Build(_) => {
-            log::info!("hello");
-            Ok(())
-        }
+/// Everything required to configure and run the `wasm-pack build` command.
+#[derive(FromArgs, PartialEq, Debug)]
+#[argh(subcommand, name = "test")]
+pub struct TestOptions {}
 
-        Command::Test(_) => {
-            log::info!("hello");
-            Ok(())
-        }
-    }
-}
+/// Everything required to configure and run the `wasm-pack build` command.
+#[derive(FromArgs, PartialEq, Debug)]
+#[argh(subcommand, name = "build")]
+pub struct BuildOptions {}
+
+/// Everything required to configure and run the `wasm-pack build` command.
+#[derive(FromArgs, PartialEq, Debug)]
+#[argh(subcommand, name = "develop")]
+pub struct DevelopOptions {}

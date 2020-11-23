@@ -10,6 +10,13 @@ edition = "2018"
 yew = { git = "https://github.com/yewstack/yew.git" }
 wasm-logger = "0.2.0"
 log = "0.4.11"
+wasm-bindgen = "0.2.68"
 
 [build-dependencies]
 yew-pack = { path = "../yew-pack" }
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+
+[package.metadata.yew-pack]
