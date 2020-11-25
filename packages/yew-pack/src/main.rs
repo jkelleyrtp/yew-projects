@@ -8,7 +8,8 @@ use yew_pack::cargo::{crate_root, workspace_root};
 use yew_pack::cli::{LaunchCommand, LaunchOptions};
 
 fn main() -> yew_pack::error::Result<()> {
-    // env_logger::init();
+    // println!("ASDADS");
+    env_logger::init();
     // tide::log::with_level(tide::log::LevelFilter::Trace);
 
     let up: LaunchOptions = argh::from_env();
@@ -19,6 +20,7 @@ fn main() -> yew_pack::error::Result<()> {
             Ok(())
         }
         LaunchCommand::Build(options) => {
+            log::info!("Building package 🛠");
             yew_pack::builder::build_yew_project(options).expect("Building failed");
             Ok(())
         }

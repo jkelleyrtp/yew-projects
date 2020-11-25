@@ -17,6 +17,7 @@ argh = "0.1.4"
 json = "0.12.4"
 async-std = "1.7.0"
 tide = "0.15.0"
+cargo_metadata = "0.12.1"
 # tokio = { version = "0.2.22", features = ["macros", "rt-threaded", "sync", "process", "io-util", "uds"] }
 # warp = "0.2.5"
 # warp = "0.2.5"

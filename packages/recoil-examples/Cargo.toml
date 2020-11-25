@@ -9,7 +9,7 @@ edition = "2018"
 [dependencies]
 yew = { path = "../../../Projects/yew/yew" }
 yew-functional = { path = "../../../Projects/yew/yew-functional" }
-recoil-yew = { path = "../recoil-yew" }
+yew-recoil = { path = "../yew-recoil" }
 wasm-logger = "0.2.0"
 log = "0.4"
 uuid = { version = "0.8", features = ["serde", "v4", "wasm-bindgen"] }

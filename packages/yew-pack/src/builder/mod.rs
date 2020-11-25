@@ -44,7 +44,7 @@ pub fn build_yew_project(options: crate::cli::BuildOptions) -> Result<()> {
     // [3] Bindgen the final binary for use easy linking
     let mut bindgen_builder = Bindgen::new();
     bindgen_builder
-        .input_path(target_dir.join("wasm32-unknown-unknown/release/yew_pack_example.wasm"))
+        .input_path(target_dir.join("wasm32-unknown-unknown/release/recoil_examples.wasm"))
         .web(true)?
         .debug(true)
         .demangle(true)
@@ -71,6 +71,11 @@ fn gen_page(module: &str) -> String {
 <html>
   <head>
     <meta content="text/html;charset=utf-8" http-equiv="Content-Type" />
+    <meta charset="UTF-8" />
+    <link
+    href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css"
+    rel="stylesheet"
+    />
   </head>
   <body>
     <!-- Note the usage of `type=module` here as this is an ES6 module -->
@@ -91,12 +96,28 @@ struct BuildConfig {
     workspace_dir: PathBuf,
     target_dir: PathBuf,
 }
+use cargo_metadata::{CargoOpt, MetadataCommand};
 impl BuildConfig {
     pub(crate) fn from_build_options(options: &crate::cli::BuildOptions) -> Result<Self> {
         let crate_dir = crate::cargo::crate_root()?;
         let workspace_dir = crate::cargo::workspace_root()?;
         let target_dir = workspace_dir.join("target");
         let out_dir = crate_dir.join("public");
+
+        let _metadata = MetadataCommand::new()
+            .manifest_path("./Cargo.toml")
+            .features(CargoOpt::AllFeatures)
+            .exec()
+            .unwrap();
+
+        log::info!(
+            "Packages are {:#?}",
+            _metadata
+                .packages
+                .iter()
+                .map(|f| { &f.name })
+                .collect::<Vec<_>>()
+        );
 
         Ok(Self {
             out_dir,
