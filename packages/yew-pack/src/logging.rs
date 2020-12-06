@@ -1,5 +1,5 @@
 use fern::colors::{Color, ColoredLevelConfig};
-use log::{debug, error, info, trace, warn};
+use log::{debug};
 
 pub fn set_up_logging() {
     // configure colors for the whole line

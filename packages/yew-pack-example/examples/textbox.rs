@@ -10,6 +10,10 @@ fn main() {
 fn my_app() -> Html {
     html! {
         <Storyboard>
+            <p>
+                {"hello world"}
+
+            </p>
             <components::Textbox />
             <components::RadioInput />
         </Storyboard>
@@ -26,7 +30,6 @@ fn storyboard(props: &StoryboardProps) -> Html {
     html! {
         <div>
             <h1>{"Storyboard of Components"}</h1>
-
             {props.children.clone()}
         </div>
     }

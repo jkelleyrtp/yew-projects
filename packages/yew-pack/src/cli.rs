@@ -1,4 +1,4 @@
-use crate::error::Error;
+
 use argh::FromArgs;
 
 #[derive(FromArgs, PartialEq, Debug)]

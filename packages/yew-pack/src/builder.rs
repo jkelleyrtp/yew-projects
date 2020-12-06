@@ -50,8 +50,12 @@ pub fn build(config: &Config, _build_config: &BuildConfig) -> Result<()> {
         .stdout(std::process::Stdio::piped())
         .stderr(std::process::Stdio::piped());
 
+    if let ExecutableType::Example(example_name) = executable {
+        cmd.arg("--example").arg(example_name);
+    }
+
     let mut child = cmd.spawn()?;
-    let err_code = child.wait()?;
+    let _err_code = child.wait()?;
 
     // [2] Establish the output directory structure
     let bindgen_outdir = out_dir.join("wasm");
@@ -92,7 +96,7 @@ pub fn build(config: &Config, _build_config: &BuildConfig) -> Result<()> {
     let copy_options = fs_extra::dir::CopyOptions::new();
     match fs_extra::dir::copy(static_dir, out_dir, &copy_options) {
         Ok(_) => {}
-        Err(e) => {
+        Err(_e) => {
             warn!("Error copying dir");
         }
     }

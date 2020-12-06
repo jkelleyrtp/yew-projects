@@ -1,18 +1,13 @@
-use crate::{
-    builder::BuildConfig,
-    cli::{BuildOptions, DevelopOptions},
-    config::Config,
-    error::Result,
-};
-use async_std::{prelude::FutureExt, sync::Sender};
+use crate::{builder::BuildConfig, cli::DevelopOptions, config::Config, error::Result};
+use async_std::prelude::FutureExt;
 
 use async_std::future;
 use async_std::prelude::*;
-use futures::{future::Either, select};
+
 use log::info;
 use notify::{RecommendedWatcher, RecursiveMode, Watcher};
+use std::path::PathBuf;
 use std::time::Duration;
-use std::{net::SocketAddr, path::PathBuf};
 
 pub struct DevelopConfig {}
 impl Into<DevelopConfig> for DevelopOptions {
@@ -21,7 +16,7 @@ impl Into<DevelopConfig> for DevelopOptions {
     }
 }
 
-pub async fn start(config: &Config, options: &DevelopConfig) -> Result<()> {
+pub async fn start(config: &Config, _options: &DevelopConfig) -> Result<()> {
     log::info!("Starting development server 🚀");
 
     let Config { out_dir, .. } = config;
@@ -58,13 +53,17 @@ async fn watch_directory(config: Config) -> Result<()> {
         .watch(src_dir.join("src"), RecursiveMode::Recursive)
         .expect("Failed to watch dir");
 
+    watcher
+        .watch(src_dir.join("examples"), RecursiveMode::Recursive)
+        .expect("Failed to watch dir");
+
     let build_config = BuildConfig::default();
 
     'run: loop {
         crate::builder::build(&config, &build_config)?;
 
         // Wait for the message with a debounce
-        let msg = watcher_rx
+        let _msg = watcher_rx
             .recv()
             .join(future::ready(1).delay(Duration::from_millis(2000)))
             .await;
@@ -75,8 +74,8 @@ async fn watch_directory(config: Config) -> Result<()> {
 }
 
 async fn launch_server(outdir: PathBuf) -> Result<()> {
-    let crate_dir = crate::cargo::crate_root()?;
-    let workspace_dir = crate::cargo::workspace_root()?;
+    let _crate_dir = crate::cargo::crate_root()?;
+    let _workspace_dir = crate::cargo::workspace_root()?;
 
     let mut app = tide::with_state(ServerState::new(outdir.to_owned()));
     let p = outdir.display().to_string();
