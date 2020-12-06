@@ -1,34 +1,27 @@
-use notify::{RecommendedWatcher, RecursiveMode, Watcher};
-use std::env;
-use std::net::SocketAddr;
-use std::path::Path;
-use std::process::Command;
-use tide::{log, Request};
-use yew_pack::cargo::{crate_root, workspace_root};
 use yew_pack::cli::{LaunchCommand, LaunchOptions};
 
-fn main() -> yew_pack::error::Result<()> {
-    // println!("ASDADS");
-    env_logger::init();
-    // tide::log::with_level(tide::log::LevelFilter::Trace);
+#[async_std::main]
+async fn main() -> yew_pack::error::Result<()> {
+    yew_pack::logging::set_up_logging();
 
-    let up: LaunchOptions = argh::from_env();
+    let opts: LaunchOptions = argh::from_env();
+    let mut config = yew_pack::config::Config::new()?;
 
-    match up.command {
-        LaunchCommand::Test(options) => {
-            todo!("Pass-through to wasm-bindgen test");
-            Ok(())
-        }
+    match opts.command {
         LaunchCommand::Build(options) => {
-            log::info!("Building package 🛠");
-            yew_pack::builder::build_yew_project(options).expect("Building failed");
-            Ok(())
+            config.with_build_options(&options);
+            yew_pack::builder::build(&config, &(options.into()))?;
         }
+
         LaunchCommand::Develop(options) => {
-            log::info!("Starting development server 🚀");
-            let server = yew_pack::develop::launch_development_server(options);
-            async_std::task::block_on(server);
-            Ok(())
+            config.with_develop_options(&options);
+            yew_pack::develop::start(&config, &(options.into())).await?;
+        }
+
+        _ => {
+            todo!("Command not currently implemented");
         }
     }
+
+    Ok(())
 }

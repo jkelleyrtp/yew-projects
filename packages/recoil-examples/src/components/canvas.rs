@@ -82,6 +82,7 @@ pub fn canvas_element(props: &ElementProps) -> Html {
                 class="bg-blue-200 p-2"
                 onmousedown=mouse_down
                 onmouseup=mouse_up
+                onmousemove=mouse_drag
             >
             {"Click here to move"}</div>
             <p>{"Move"}</p>

@@ -1,7 +1,7 @@
 [workspace]
 members = [
-    "packages/yew-store",
-    # "packages/yew-desktop",
+    # "packages/yew-store",
+    "packages/yew-desktop",
     "packages/yew-recoil",
     "packages/recoil-examples",
     "packages/yew-pack-example",

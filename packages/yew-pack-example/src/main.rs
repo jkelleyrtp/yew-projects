@@ -1,10 +1,7 @@
 use yew;
 
-use wasm_bindgen::prelude::*;
-
 // Called when the wasm module is instantiated
-#[wasm_bindgen(start)]
-pub fn main() {
+fn main() {
     wasm_logger::init(wasm_logger::Config::default());
     yew::start_app::<MyApp>();
 }
@@ -29,6 +26,13 @@ impl yew::Component for MyApp {
             <div align="center">
               <h1>{"📦✨  yew-pack"}</h1>
               <p>
+                <br />
+                <strong>{"Tooling to supercharge Yew projects"}</strong>
+                <br />
+                <strong>{"Tooling to supercharge Yew projects"}</strong>
+                <br />
+                <strong>{"Tooling to supercharge Yew projects"}</strong>
+                <br />
                 <strong>{"Tooling to supercharge Yew projects"}</strong>
               </p>
             </div>

@@ -7,18 +7,21 @@ edition = "2018"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-notify = "4.0.15"
 thiserror = "1.0.22"
-log = "0.4.11"
-env_logger = "0.8.2"
-wasm-bindgen-cli-support = "0.2.68"
+log = "0.4"
+fern = { version = "0.6.0", features = ["colored"] }
+wasm-bindgen-cli-support = "0.2.69"
 anyhow = "1.0.34"
 argh = "0.1.4"
-json = "0.12.4"
-async-std = "1.7.0"
+serde = "1"
+serde_json = "1"
+async-std = { version = "1.7.0", features = ["attributes"] }
 tide = "0.15.0"
-cargo_metadata = "0.12.1"
-# tokio = { version = "0.2.22", features = ["macros", "rt-threaded", "sync", "process", "io-util", "uds"] }
-# warp = "0.2.5"
-# warp = "0.2.5"
-# tokio = { version = "0.3.4", features = ["full"] }
+cargo_toml = "0.8.1"
+fs_extra = "1.2.0"
+
+notify = "5.0.0-pre.3"
+futures = "0.3.8"
+rjdebounce = "0.2.1"
+tide-rustls = "0.1.5"
+tempfile = "3.1.0"

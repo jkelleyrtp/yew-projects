@@ -2,10 +2,10 @@ use yew::prelude::*;
 use yew_functional::*;
 use yew_recoil::prelude::RecoilRoot;
 
-mod canvas;
-mod counter;
-mod display;
-mod textinput;
+// mod canvas;
+// mod counter;
+// mod display;
+// mod textinput;
 
 #[function_component(MyApp)]
 pub fn my_app() -> Html {
@@ -14,8 +14,8 @@ pub fn my_app() -> Html {
             <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet" />
 
             <div class="mt-10 flex flex-col m-20 h-screen">
-                <display::Display />
-                <canvas::Canvas />
+                // <display::Display />
+                // <canvas::Canvas />
             </div>
         </RecoilRoot >
     }

@@ -7,6 +7,9 @@ edition = "2018"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-web-view = "0.6.3"
-yew = { git = "https://github.com/yewstack/yew.git" }
-yew-functional = { git = "https://github.com/yewstack/yew.git" }
+web-view = "0.7.1"
+async-std = "1.7.0"
+tide = "0.15.0"
+anyhow = "1.0.34"
+log = "0.4"
+colog = "1"

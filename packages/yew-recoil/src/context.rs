@@ -1,7 +1,7 @@
 // Naming this file use_context could be confusing. Not least to the IDE.
 use crate::{
-    hooks::state::UpdateAction,
-    readable::{atom::Atom, atom::AtomBuilder, AtomValue},
+    hooks::UpdateAction,
+    readable::{Atom, AtomBuilder, AtomValue},
 };
 use std::any::Any;
 use std::cell::RefCell;

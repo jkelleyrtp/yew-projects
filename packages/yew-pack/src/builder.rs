@@ -1,13 +1,25 @@
-use crate::error::Result;
-use std::ffi::OsString;
-use std::fs;
-use std::io::Write;
-use std::net::SocketAddr;
-use std::path::{Path, PathBuf};
-use std::process::Command;
-use wasm_bindgen_cli_support::{Bindgen, EncodeInto};
+use crate::{
+    cli::BuildOptions,
+    config::{Config, ExecutableType},
+    error::Result,
+};
+use log::{info, warn};
+use std::{io::Write, process::Command};
+use wasm_bindgen_cli_support::Bindgen;
 
-pub fn build_yew_project(options: crate::cli::BuildOptions) -> Result<()> {
+pub struct BuildConfig {}
+impl Into<BuildConfig> for BuildOptions {
+    fn into(self) -> BuildConfig {
+        BuildConfig {}
+    }
+}
+impl Default for BuildConfig {
+    fn default() -> Self {
+        Self {}
+    }
+}
+
+pub fn build(config: &Config, _build_config: &BuildConfig) -> Result<()> {
     /*
     [1] Build the project with cargo, generating a wasm32-unknown-unknown target (is there a more specific, better target to leverage?)
     [2] Generate the appropriate build folders
@@ -16,35 +28,49 @@ pub fn build_yew_project(options: crate::cli::BuildOptions) -> Result<()> {
     [5] Link up the html page to the wasm module
     */
 
-    let BuildConfig {
-        crate_dir,
+    let Config {
         out_dir,
+        crate_dir,
         target_dir,
-        workspace_dir,
-    } = BuildConfig::from_build_options(&options)?;
+        static_dir,
+        executable,
+        ..
+    } = config;
+
+    let t_start = std::time::Instant::now();
 
     // [1] Build the .wasm module
+    info!("Running build commands...");
     let mut cmd = Command::new("cargo");
     cmd.current_dir(&crate_dir)
         .arg("build")
-        .arg("--lib")
         .arg("--release")
         .arg("--target")
         .arg("wasm32-unknown-unknown")
-        // Hide cargo output, because we are using stderr to track build time.
         .stdout(std::process::Stdio::piped())
         .stderr(std::process::Stdio::piped());
 
-    let mut child = cmd.spawn()?; //.expect("Failed to execute child");
-    let err_code = child.wait()?; //.expect("Failed to wait on child");
+    let mut child = cmd.spawn()?;
+    let err_code = child.wait()?;
 
     // [2] Establish the output directory structure
     let bindgen_outdir = out_dir.join("wasm");
 
     // [3] Bindgen the final binary for use easy linking
     let mut bindgen_builder = Bindgen::new();
+
+    let input_path = match executable {
+        ExecutableType::Binary(name) | ExecutableType::Lib(name) => target_dir
+            .join("wasm32-unknown-unknown/release")
+            .join(format!("{}.wasm", name)),
+
+        ExecutableType::Example(name) => target_dir
+            .join("wasm32-unknown-unknown/release/examples")
+            .join(format!("{}.wasm", name)),
+    };
+
     bindgen_builder
-        .input_path(target_dir.join("wasm32-unknown-unknown/release/recoil_examples.wasm"))
+        .input_path(input_path)
         .web(true)?
         .debug(true)
         .demangle(true)
@@ -59,9 +85,20 @@ pub fn build_yew_project(options: crate::cli::BuildOptions) -> Result<()> {
 
     // [5] Generate the html file with the module name
     // TODO: support names via options
+    info!("Writing to '{:#?}' directory...", out_dir);
     let mut file = std::fs::File::create(out_dir.join("index.html"))?;
     file.write_all(gen_page("./wasm/module.js").as_str().as_bytes())?;
 
+    let copy_options = fs_extra::dir::CopyOptions::new();
+    match fs_extra::dir::copy(static_dir, out_dir, &copy_options) {
+        Ok(_) => {}
+        Err(e) => {
+            warn!("Error copying dir");
+        }
+    }
+
+    let t_end = std::time::Instant::now();
+    log::info!("Done in {}ms! 🎉", (t_end - t_start).as_millis());
     Ok(())
 }
 
@@ -88,42 +125,4 @@ fn gen_page(module: &str) -> String {
 "#,
         module
     )
-}
-
-struct BuildConfig {
-    out_dir: PathBuf,
-    crate_dir: PathBuf,
-    workspace_dir: PathBuf,
-    target_dir: PathBuf,
-}
-use cargo_metadata::{CargoOpt, MetadataCommand};
-impl BuildConfig {
-    pub(crate) fn from_build_options(options: &crate::cli::BuildOptions) -> Result<Self> {
-        let crate_dir = crate::cargo::crate_root()?;
-        let workspace_dir = crate::cargo::workspace_root()?;
-        let target_dir = workspace_dir.join("target");
-        let out_dir = crate_dir.join("public");
-
-        let _metadata = MetadataCommand::new()
-            .manifest_path("./Cargo.toml")
-            .features(CargoOpt::AllFeatures)
-            .exec()
-            .unwrap();
-
-        log::info!(
-            "Packages are {:#?}",
-            _metadata
-                .packages
-                .iter()
-                .map(|f| { &f.name })
-                .collect::<Vec<_>>()
-        );
-
-        Ok(Self {
-            out_dir,
-            crate_dir,
-            workspace_dir,
-            target_dir,
-        })
-    }
 }

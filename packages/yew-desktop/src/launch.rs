@@ -41,7 +41,6 @@ impl AppBuilder {
 
         self
     }
-    pub fn main(mut self) {}
     pub fn window_main<COMP, A, F: Fn(web_view::WebViewBuilder<'_, (), A, &str>)>(
         mut self,
         builderFn: F,
