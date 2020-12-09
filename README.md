@@ -33,3 +33,15 @@ A collection of tools to better flesh out the Rust frontend story with Yew.
 | Project    | Info                        |
 | ---------- | --------------------------- |
 | yew-router | Flexible macro-based router |
+
+
+
+<!-- Hey,
+
+I'm working exactly on this, but instead of Redux, I'm working on porting RecoilJS. You need to wrap your app in a context, or write a custom context. There are context examples in the functional crate, but feel free to use my context and hook as inspiration. Currently, my atoms don't memoize their inputs/outputs which is a key feature of selectors, so you'll want to implement the memoization and suppress downstream updates to selector subscriptions. Redux's model is fairly straightforward.
+
+https://github.com/jkelleyrtp/yew-projects/blob/master/packages/yew-recoil/src/context.rs
+https://github.com/jkelleyrtp/yew-projects/blob/master/packages/yew-recoil/src/hooks.rs
+
+If you want to contribute, I'm also using the same learnings from my RecoilJS implementation 
+ -->
